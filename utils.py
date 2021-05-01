@@ -1,5 +1,7 @@
-import pandas as pd
+import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
+import seaborn as sns
 from scipy import stats
 
 columns = [
@@ -52,7 +54,7 @@ numerics = [
 
 def clean_df(df: pd.DataFrame) -> pd.DataFrame:
     """Cleans the DataFrame as suggested in 'machine learning task.pdf'
-    
+
     - Replaces '?' with NaNs
     - Removes 'symboling'
     - Ignores rows with missing values in target variable
@@ -100,8 +102,8 @@ def clean_df(df: pd.DataFrame) -> pd.DataFrame:
 
 def summary(model, X: pd.DataFrame, y: pd.Series):
     """R-like summary of a linear regression model
-    
-    Inspired by 
+
+    Inspired by
     https://stackoverflow.com/questions/27928275/find-p-value-significance-in-scikit-learn-linearregression
 
     Parameters
@@ -154,3 +156,60 @@ def summary(model, X: pd.DataFrame, y: pd.Series):
     pd.set_option("display.max_rows", 10)
     print("R squared: ", round(model.score(X, y), 4), "\n")
 
+
+def create_batches_of_columns(df: pd.DataFrame, batch_size: int = 3) -> list():
+    """Splits a list of columns into smaller batches for further processing.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+
+    batch_size: int, optional
+        Size of your batch, by default 3
+
+    Returns
+    -------
+    List
+        List of batches (lists) e.g.: [ [col1,col2], [col3, col4] ]
+    """
+
+    cols = [c for c in df.columns if c in numerics]
+    chunks, batches = (len(cols) - 1) // batch_size + 1, []
+
+    for i in range(chunks):
+
+        batch = cols[i * batch_size : (i + 1) * batch_size]
+
+        if "normalized-losses" not in batch:
+            batch.insert(0, "normalized-losses")
+
+        batches.append(batch)
+
+    return batches
+
+
+def plot_correlation(df: pd.DataFrame, save=True, dpi=300):
+    """Shows a correlation matrix
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        Contains training data
+    save : bool, optional
+        Saves figure at `img/`, by default False
+    dpi : int, optional
+        Figure resolution, by default 150
+    """
+    # Compute the correlation matrix
+    corr_all = df.corr()
+    # Generate a mask for the upper triangle
+    mask = np.zeros_like(corr_all, dtype=np.bool)
+    mask[np.triu_indices_from(mask)] = True
+    # Set up the matplotlib figure
+    f, ax = plt.subplots(figsize=(7, 7))
+    # Draw the heatmap with the mask and correct aspect ratio
+    sns.heatmap(corr_all, mask=mask, square=True, linewidths=0.5, ax=ax, cmap="BuPu")
+    if save:
+        plt.savefig("img/correlation_heatmap.png", dpi=dpi)
+    # print(corr_all)
+    plt.show()
