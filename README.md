@@ -1,15 +1,12 @@
 # Automobile
-Basic regression example
+This is a humble example of a regression for my friends at [Ailys]().
 
-# 1. Get Data
-```bash
-mkdir data && cd data && \
-    curl -O https://archive.ics.uci.edu/ml/machine-learning-databases/autos/imports-85.data && \
-    curl -O https://archive.ics.uci.edu/ml/machine-learning-databases/autos/imports-85.names && \
-    curl -O https://archive.ics.uci.edu/ml/machine-learning-databases/autos/misc
-```
+![Small preview]("img/demo.gif")
 
-# 2. Environment
+- [Presentation](https://storage.googleapis.com/ailys/demo.slides.html)
+- [Notebook](https://github.com/sekR4/Automobile/blob/main/demo.ipynb)
+
+Simply create your environment, pip-install the requirements and do:
 ```bash
 pip install "pycaret[full]"
 ```
