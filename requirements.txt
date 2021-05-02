@@ -1,5 +1,4 @@
-pandas
-jupyter
-numpy
-scikit-learn
-pycaret
+pandas==1.2.4
+jupyter==1.0.0
+numpy==1.19.5
+scikit-learn==0.23.2
