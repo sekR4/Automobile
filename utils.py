@@ -188,7 +188,7 @@ def create_batches_of_columns(df: pd.DataFrame, batch_size: int = 3) -> list():
     return batches
 
 
-def plot_correlation(df: pd.DataFrame, save=True, dpi=300):
+def plot_correlation(df: pd.DataFrame, only_save=True, dpi=300):
     """Shows a correlation matrix
 
     Parameters
@@ -198,18 +198,23 @@ def plot_correlation(df: pd.DataFrame, save=True, dpi=300):
     save : bool, optional
         Saves figure at `img/`, by default False
     dpi : int, optional
-        Figure resolution, by default 150
+        Figure resolution, by default 300
     """
     # Compute the correlation matrix
     corr_all = df.corr()
+
     # Generate a mask for the upper triangle
     mask = np.zeros_like(corr_all, dtype=np.bool)
     mask[np.triu_indices_from(mask)] = True
+
     # Set up the matplotlib figure
     f, ax = plt.subplots(figsize=(7, 7))
+
     # Draw the heatmap with the mask and correct aspect ratio
     sns.heatmap(corr_all, mask=mask, square=True, linewidths=0.5, ax=ax, cmap="BuPu")
-    if save:
+    plt.title("Correlation Matrix Heatmap")
+    if only_save:
         plt.savefig("img/correlation_heatmap.png", dpi=dpi)
-    # print(corr_all)
-    plt.show()
+        plt.close()
+    else:
+        plt.show()
